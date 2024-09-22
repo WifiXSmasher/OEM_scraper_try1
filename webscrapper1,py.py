@@ -13,7 +13,7 @@ def scrape_vulnerabilities(oem_url):
         # Wait for the vulnerability list to load
         wait = WebDriverWait(driver, 10)
 
-        # Try to find elements
+        # find the elements in the a tag where the vulnerabilitiy text lies
         vulnerabilities = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, "ng-binding")))
 
         # Print the text of each vulnerability entry
@@ -27,5 +27,5 @@ def scrape_vulnerabilities(oem_url):
         driver.quit()
 
 
-oem_url = "https://sec.cloudapps.cisco.com/security/center/publicationListing.x"
+oem_url = "https://sec.cloudapps.cisco.com/security/center/publicationListing.x"  # site url for all the vulnerabilities
 scrape_vulnerabilities(oem_url)
