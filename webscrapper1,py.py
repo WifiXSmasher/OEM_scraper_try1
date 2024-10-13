@@ -3,42 +3,82 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
+import time
 
-def scrape_vulnerabilities(oem_url):
-    driver = webdriver.Chrome()
 
-    driver.get(oem_url)
-
+# Function to scrape vulnerabilities from the given URI for a specific product
+def scrape_vulnerabilities(URI, product):
+    # Initialize the Firefox WebDriver (ensure geckodriver is installed)
+    driver = webdriver.Firefox()
+    product_uri=[]
     try:
-        # Wait for the vulnerability list to load
-        wait = WebDriverWait(driver, 10)
+        # Navigate to the provided URL
+        driver.get(URI)
 
-        # Find the elements in the <table>
-        vulnerabilities = wait.until(EC.presence_of_all_elements_located((By.TAG_NAME, "table")))
+        # Wait for the page to load the vulnerability table
+        wait = WebDriverWait(driver, 20)  # Max wait time is 13 seconds
+        vulnerabilities_table = wait.until(EC.presence_of_element_located((By.TAG_NAME, "table")))
 
-        # Print the text of each vulnerability entry
-        if vulnerabilities:
-            doc = driver.page_source
-            soup = BeautifulSoup(doc, 'html.parser')
+        # Get the full page source and parse it with BeautifulSoup
+        page_source = driver.page_source
+        soup = BeautifulSoup(page_source, 'html.parser')
 
-            # Find all <tr> elements within the table
-            rows = soup.find_all("tr")
+        # Find the table containing vulnerabilities
+        table = soup.find("table")
 
-            # Iterate through each row to extract <td> elements
-            unique=[]
-            for row in rows:
-                # Get all <td> elements in the current row
-                cells = row.find_all("td")
-                # Extract and print the text from each <td>
-                for cell in cells:
-                    cell_text = cell.get_text(strip=True)
-                    if cell_text: # Only print non-empty text
-                        print(cell_text)
+        if table:
+            # Extract all links in the table first, so we don't need to reload the table after each iteration
+            links = [a['href'] for a in table.find_all("a", href=True)]
+            link2=[]#temporary list to store unique links
+            for link in links:
+                if link not in link2:# if link exists in link2 then do not add
+                    link2.append(link)
+
+            links=link2# equating the lists
+            print(links)
+
+            # Iterate over each link and visit the page
+            for link in links:
+                # Open the link
+                driver.get(link)
+
+                # Wait for the new page to load
+                WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+
+                # Get the new page source and parse it
+                details_page = driver.page_source
+                details_soup = BeautifulSoup(details_page, 'html.parser')
+
+                # Check if the product name appears on the details page
+                if product.lower() in details_soup.get_text().lower():
+                    # print(f"Product '{product}' found on page: {link}")
+                    product_uri.append(link)
+                    # Scrape the relevant data from the details page
+                    details_data = details_soup.get_text()  # Customize this based on the details page structure
+                    # print(details_data)
+
+                else:
+                    print(f"Product '{product}' not found on page: {link}")
+
+                # Optional: Wait between page navigations
+                time.sleep(2)
+
+            if not links:
+                print("No links found in the table.")
         else:
-            print("No vulnerabilities found.")
+            print("No vulnerabilities table found.")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
     finally:
+        # Close the browser when done (cleanup)
+        print(f" URIs = {product_uri}")
         driver.quit()
 
-# Example usage
-oem_url = "https://sec.cloudapps.cisco.com/security/center/publicationListing.x"  # site URL for all the vulnerabilities
-scrape_vulnerabilities(oem_url)
+    # return product_uri
+
+if __name__ == "__main__":
+    # Example usage of the scrape_vulnerabilities function
+    oem_url = "https://sec.cloudapps.cisco.com/security/center/publicationListing.x"
+    scrape_vulnerabilities(oem_url, "Catalyst 9300LM Series Switches")
