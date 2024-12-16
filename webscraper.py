@@ -4,8 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait  # Waits for conditions
 from selenium.webdriver.support import expected_conditions as EC  # Defines expected conditions
 from bs4 import BeautifulSoup  # Parses HTML content
 import time  # Used for adding delays
-import data_extractor
-
+from data_extractor import Data_extractor as DE
 
 # Function to scrape vulnerabilities from the given URI for a specific product
 def scrape_vulnerabilities(URI, product):
@@ -71,7 +70,7 @@ def scrape_vulnerabilities(URI, product):
                 if product.lower() in details_soup.get_text().lower():
 
                     print(f"Product '{product}' found on page: {link}")
-                    data_extractor.data_extractor(link, product)
+                    DE.extract(link, product)
                     # Add the link to the list of URIs where the product is found
                     product_in_uri.append(link)
 
