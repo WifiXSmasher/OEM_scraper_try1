@@ -1,4 +1,5 @@
 import re
+import sqlite3
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -18,8 +19,9 @@ class Data_extractor:
         V.) Cisco Bug IDs:
         Vi.) CVSS Score:
     """
+
     @staticmethod
-    def extract( link, product):
+    def extract(link, product):
         driver = webdriver.Firefox()
 
         try:
@@ -80,6 +82,9 @@ class Data_extractor:
             "cisco_bug_id": cisco_bug_id,
             "cvss": cvss
         }
+
+
+
 
 # for testin the oblect
 # if __name__ == "__main__":
