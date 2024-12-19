@@ -7,6 +7,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from bs4 import BeautifulSoup
 from selenium.webdriver.support import expected_conditions as EC
 from database import DB
+from message import Mail
 
 
 class Data_extractor:
@@ -66,7 +67,6 @@ class Data_extractor:
                     (By.XPATH, "//div[contains(text(), 'CVSS Score:')]//following-sibling::div//a")))]
             cvss = cvss[0]
 
-
             # print statements for debugging
             print(f"the Advisory ID is : {advisory_id}")
             print(f"the first publish date was : {published_date}")
@@ -74,23 +74,23 @@ class Data_extractor:
             print("Workarounds:", workarounds)
             print(f"Cisco Bug IDs:{cisco_bug_id}")
             print(f"CVSS Score:{cvss}")
+            data = {
+                "product": product,
+                "advisory_ID": advisory_id,
+                "published_date": published_date,
+                "workaround": workarounds,
+                "cisco_bug_ID": cisco_bug_id,
+                "CVSS": cvss,
+                "link": link
+            }
 
         except Exception as e:
             print(f"an error occured during data extraction of link:{link} : {e}")
             return None
 
         finally:
+            Mail.email(product, link, data)
             driver.quit()
-
-        data = {
-            "product": product,
-            "advisory_ID": advisory_id,
-            "published_date": published_date,
-            "workaround": workarounds,
-            "cisco_bug_ID": cisco_bug_id,
-            "CVSS": cvss,
-            "link": link
-        }
 
         DB.append("vulnerabilities.db", data, " properties")
 
