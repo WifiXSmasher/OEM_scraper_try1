@@ -6,55 +6,52 @@ from bs4 import BeautifulSoup  # Parses HTML content
 import time  # Used for adding delays
 from data_extractor import Data_extractor as DE
 
+
 # Function to scrape vulnerabilities from the given URI for a specific product
 def scrape_vulnerabilities(URI, product):
 
-    # List to store products that are affected by vulnerabilities
     affected_products = []
 
-    # List to store products that are not affected (currently unused)
+    # list to store products that are not affected (currently unused)
     not_affected_products = []
 
-    # Initialize the Firefox WebDriver (ensure geckodriver is installed)
     driver = webdriver.Firefox()
 
-    # List to store URIs where the product is found
+    # list to store URIs where the product is found
     product_in_uri = []
 
     try:
-        # Navigate to the provided URL
+
         driver.get(URI)
+        wait = WebDriverWait(driver, 30)
 
-        # Create a WebDriverWait object with a timeout of 20 seconds
-        wait = WebDriverWait(driver, 20)  # Max wait time is 20seconds
-
-        # Wait until a <table> element is present on the page
+        # wait until a <table> element is present on the page
         vulnerabilities_table = wait.until(EC.presence_of_element_located((By.TAG_NAME, "table")))
 
-        # Get the full page source and parse it using BeautifulSoup
+        # get the full page source and parse it using BeautifulSoup
         page_source = driver.page_source
         soup = BeautifulSoup(page_source, 'html.parser')
 
-        # Find the first <table> element on the page
+        # find the first <table> element on the page
         table = soup.find("table")
 
-        if table:  # If table exists then run the following code
-            # Extract all hyperlinks from the table
+        if table:
+            #extract all hyperlinks from the table
             links = [a['href'] for a in table.find_all("a", href=True)]
 
-            # Temporary list to store unique links
+            # temp list to store unique links
             link2 = []
 
             for link in links:
-                # Add the link to link2 if it's not already in link2 and not equal to '#'
+                # add the link to link2 if it's not already in link2 and not equal to '#'
                 if link not in link2 and link != '#':
                     link2.append(link)
 
             # Assign the unique links back to the links list
             links = link2
-            print(links)# shows all the link that its going to iterate over
+            print(links)  # shows all the link that its going to iterate over
 
-            # Iterate over each link and visit the page
+            # iterate over each link and visit the page
             for link in links:
                 # Open the link
                 driver.get(link)
@@ -112,6 +109,7 @@ def scrape_vulnerabilities(URI, product):
     # Uncomment the following line if you want the function to return the list of product URIs
     # return product_in_uri
 
+
 if __name__ == "__main__":
     # Example usage of the scrape_vulnerabilities function
 
@@ -119,4 +117,4 @@ if __name__ == "__main__":
     oem_url = "https://sec.cloudapps.cisco.com/security/center/publicationListing.x"
 
     # The product name to search for
-    scrape_vulnerabilities(oem_url, "6300 Series Embedded Services APs")
+    scrape_vulnerabilities(oem_url, "MDS 9000 Series Multilayer Switches ")

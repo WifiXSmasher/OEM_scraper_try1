@@ -6,22 +6,26 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from bs4 import BeautifulSoup
 from selenium.webdriver.support import expected_conditions as EC
+from database import DB
 
 
 class Data_extractor:
     """
-    1. go to the link
-    2. extract the data of
-        i.) Advisory ID:
-        ii.) First Published:
-        iii.) Last Updated:
-        iv.) Workarounds:
-        V.) Cisco Bug IDs:
-        Vi.) CVSS Score:
+    1. make a database and trans
     """
 
     @staticmethod
     def extract(link, product):
+        """
+            1. go to the link
+            2. extract the data of
+                i.) Advisory ID:
+                ii.) First Published:
+                iii.) Last Updated:
+                iv.) Workarounds:
+                V.) Cisco Bug IDs:
+                Vi.) CVSS Score:
+            """
         driver = webdriver.Firefox()
 
         try:
@@ -45,9 +49,10 @@ class Data_extractor:
             # except:
             #     print(f"last published date not found")
 
-
-            workarounds_element = WebDriverWait(driver, 1).until(EC.presence_of_element_located(#for workaround element
-                (By.XPATH, "//div[contains(text(), 'Workarounds:')]/following-sibling::div")))
+            # for workaround element
+            workarounds_element = WebDriverWait(driver, 1).until(
+                EC.presence_of_element_located(
+                    (By.XPATH, "//div[contains(text(), 'Workarounds:')]/following-sibling::div")))
             workarounds = workarounds_element.text
 
             #for cisco bug id
@@ -59,6 +64,8 @@ class Data_extractor:
             cvss = [re.search(r'\d+\.\d+', score.text).group(0) for score in WebDriverWait(driver, 1).until(
                 EC.presence_of_all_elements_located(
                     (By.XPATH, "//div[contains(text(), 'CVSS Score:')]//following-sibling::div//a")))]
+            cvss = cvss[0]
+
 
             # print statements for debugging
             print(f"the Advisory ID is : {advisory_id}")
@@ -75,16 +82,25 @@ class Data_extractor:
         finally:
             driver.quit()
 
-        return{
+        data = {
+            "product": product,
+            "advisory_ID": advisory_id,
+            "published_date": published_date,
+            "workaround": workarounds,
+            "cisco_bug_ID": cisco_bug_id,
+            "CVSS": cvss,
+            "link": link
+        }
+
+        DB.append("vulnerabilities.db", data, " properties")
+
+        return {
             "advisory_id": advisory_id,
             "published_date": published_date,
             "workarounds": workarounds,
             "cisco_bug_id": cisco_bug_id,
             "cvss": cvss
         }
-
-
-
 
 # for testin the oblect
 # if __name__ == "__main__":
