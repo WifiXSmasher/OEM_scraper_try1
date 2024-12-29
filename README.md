@@ -22,4 +22,4 @@ This project is a Python-based web scraper designed to detect and analyze vulner
     
     6.vulnerabilities.db: This is the database file that securely stores all the collected vulnerability data.          
 
-I have rarely use LLM models for this script so there can be some buggy code ( which i will fix as i find them)
+I have rarely use LLM models for this script so there can be some buggy and unclean code  ( which i will fix as i find them)
