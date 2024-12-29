@@ -1,4 +1,4 @@
-import smtplib
+DEimport smtplib
 from email.message import EmailMessage
 import ssl
 
@@ -9,7 +9,7 @@ class Mail:
     def email(product, link, data):
         sender = 'Email Here*'
         PASSWORD = 'Password Here*'
-        receiver = 'ruchirkalla007@gmail.com'
+        receiver = 'SEnders Email here*'
 
         subject = "new vulnerability found !"
         body = f"the product {product} was reported to have a vulnerability on the following link: {link}\n with the following data: \n{data}"
