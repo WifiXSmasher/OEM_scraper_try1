@@ -64,7 +64,7 @@ def task1():
         if not data or "error" in data:
             update_status(f"Error occurred or no data found: {data.get('error', 'Unknown error')}")
         else:
-            update_details(data)  # Update the details section
+            update_details(data)
             update_status("Scraping complete!\n\nDatabase has been updated.\nThank you!")
     except Exception as e:
         update_status(f"An error occurred: {str(e)}")
