@@ -68,12 +68,12 @@ class Data_extractor:
             cvss = cvss[0]
 
             # print statements for debugging
-            print(f"the Advisory ID is : {advisory_id}")
-            print(f"the first publish date was : {published_date}")
-            # print(f"the last date was: {last_published_date}")
-            print("Workarounds:", workarounds)
-            print(f"Cisco Bug IDs:{cisco_bug_id}")
-            print(f"CVSS Score:{cvss}")
+            # print(f"the Advisory ID is : {advisory_id}")
+            # print(f"the first publish date was : {published_date}")
+            # # print(f"the last date was: {last_published_date}")
+            # print("Workarounds:", workarounds)
+            # print(f"Cisco Bug IDs:{cisco_bug_id}")
+            # print(f"CVSS Score:{cvss}")
             data = {
                 "product": product,
                 "advisory_ID": advisory_id,
@@ -83,24 +83,25 @@ class Data_extractor:
                 "CVSS": cvss,
                 "link": link
             }
-
+            print(data)
+            DB.append("vulnerabilities.db", data, " properties")
+            return data
         except Exception as e:
-            print(f"an error occured during data extraction of link:{link} : {e}")
-            return None
+            print(f"an error occurred during data extraction of link:{link} : {e}")
+            return {"error": str(e)}
 
         finally:
-            Mail.email(product, link, data)
             driver.quit()
+            Mail.email(product, link, data)
 
-        DB.append("vulnerabilities.db", data, " properties")
 
-        return {
-            "advisory_id": advisory_id,
-            "published_date": published_date,
-            "workarounds": workarounds,
-            "cisco_bug_id": cisco_bug_id,
-            "cvss": cvss
-        }
+        # return {
+        #     "advisory_id": advisory_id,
+        #     "published_date": published_date,
+        #     "workarounds": workarounds,
+        #     "cisco_bug_id": cisco_bug_id,
+        #     "cvss": cvss
+        # }
 
 # for testin the oblect
 # if __name__ == "__main__":

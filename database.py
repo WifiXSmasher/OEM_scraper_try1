@@ -90,4 +90,4 @@ class DB:
     # append("vulnerabilities.db", data, "properties")
     # erase_database("vulnerabilities.db")
     # make_table("vulnerabilities.db")
-    # view("vulnerabilities.db", "properties")
+    view("vulnerabilities.db", "properties")
