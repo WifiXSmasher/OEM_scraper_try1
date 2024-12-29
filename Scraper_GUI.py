@@ -122,20 +122,23 @@ details = CTkTextbox(root,
                      width=475,
                      height=365,
                      state=DISABLED,
+                        corner_radius=25
                      )
 
 status = CTkTextbox(root,
                     fg_color="#696969",
                     font=("Arial", 22),
-                    state=DISABLED)
+                    state=DISABLED,
+                    corner_radius=25)
+
 
 status.grid(row=1, column=7,
             columnspan=3,
             rowspan=9,
             padx=10,
             pady=50,
-            sticky="nsew")
-
+            sticky="nsew",
+            )
 details.grid(row=3, column=0,
              columnspan=7,
              rowspan=6,
