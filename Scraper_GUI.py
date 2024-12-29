@@ -122,7 +122,7 @@ details = CTkTextbox(root,
                      width=475,
                      height=365,
                      state=DISABLED,
-                        corner_radius=25
+                     corner_radius=25
                      )
 
 status = CTkTextbox(root,
@@ -131,7 +131,14 @@ status = CTkTextbox(root,
                     state=DISABLED,
                     corner_radius=25)
 
-
+note = CTkLabel(root,
+                text="*No LLM model was used in making of this GUI",
+                font=("Ariel", 12,"italic")
+                )
+note.grid(row=9, column=6,
+          columnspan=4,
+          sticky="se",
+          )
 status.grid(row=1, column=7,
             columnspan=3,
             rowspan=9,
