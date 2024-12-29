@@ -1,6 +1,6 @@
 This is a project done by me
 
-This project is a robust Python-based web scraper designed to detect and analyze vulnerabilities in OEM products. It comprises several scripts, each serving a distinct purpose:
+This project is a Python-based web scraper designed to detect and analyze vulnerabilities in OEM products. It comprises several scripts, each serving a distinct purpose:
     
     1.webscraper.py: This script searches for all the links in the provided website link and looks for mentions of the product.
             i it uses BeautifulSoup and Selenium to do so.
