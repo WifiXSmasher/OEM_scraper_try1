@@ -7,8 +7,8 @@ class Mail:
 
     @staticmethod
     def email(product, link, data):
-        sender = 'rk336@snu.edu.in'
-        PASSWORD = 'rtng osuu gyrt ifaa'
+        sender = 'Email here*'
+        PASSWORD = 'Password Here*'
         receiver = 'ruchirkalla007@gmail.com'
 
         subject = "new vulnerability found !"
