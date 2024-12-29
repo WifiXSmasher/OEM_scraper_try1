@@ -1,17 +1,16 @@
 from selenium import webdriver
-from selenium.webdriver.common.by import By  # Used to locate elements
-from selenium.webdriver.support.ui import WebDriverWait  # Waits for conditions
-from selenium.webdriver.support import expected_conditions as EC  # Defines expected conditions
-from bs4 import BeautifulSoup  # Parses HTML content
-import time  # Used for adding delays
+from selenium.webdriver.common.by import By  #  to locate elements
+from selenium.webdriver.support.ui import WebDriverWait  
+from selenium.webdriver.support import expected_conditions as EC  # defines expected conditions
+from bs4 import BeautifulSoup  # for parsing HTML content
+import time  
 from data_extractor import Data_extractor as DE
 
 
-# Function to scrape vulnerabilities from the given URI for a specific product
+
 def scrape_vulnerabilities(URI, product):
     affected_products = []
 
-    # list to store products that are not affected (currently unused)
     not_affected_products = []
 
     driver = webdriver.Firefox()
@@ -71,7 +70,7 @@ def scrape_vulnerabilities(URI, product):
                     else:
                         print(f"Product '{product}' not found on page: {link}")
 
-                    # Optional: Wait between page navigations
+                    # optional: wait between page navigations
                     # time.sleep(2)
 
         else:
@@ -100,11 +99,11 @@ if __name__ == "__main__":
 
 # XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 # from selenium import webdriver
-# from selenium.webdriver.common.by import By  # Used to locate elements
-# from selenium.webdriver.support.ui import WebDriverWait  # Waits for conditions
-# from selenium.webdriver.support import expected_conditions as EC  # Defines expected conditions
-# from bs4 import BeautifulSoup  # Parses HTML content
-# import time  # Used for adding delays
+# from selenium.webdriver.common.by import By 
+# from selenium.webdriver.support.ui import WebDriverWait 
+# from selenium.webdriver.support import expected_conditions as EC  
+# from bs4 import BeautifulSoup 
+# import time  
 # from data_extractor import Data_extractor as DE
 #
 #
@@ -126,14 +125,14 @@ if __name__ == "__main__":
 #         driver.get(URI)
 #         wait = WebDriverWait(driver, 30)
 #
-#         # wait until a <table> element is present on the page
+#        
 #         vulnerabilities_table = wait.until(EC.presence_of_element_located((By.TAG_NAME, "table")))
 #
-#         # get the full page source and parse it using BeautifulSoup
+#      
 #         page_source = driver.page_source
 #         soup = BeautifulSoup(page_source, 'html.parser')
 #
-#         # find the first <table> element on the page
+#       
 #         table = soup.find("table")
 #
 #         if table:
@@ -148,39 +147,32 @@ if __name__ == "__main__":
 #                 if link not in link2 and link != '#':
 #                     link2.append(link)
 #
-#             # Assign the unique links back to the links list
+#          
 #             links = link2
 #             print(links)  # shows all the link that its going to iterate over
 #
-#             # iterate over each link and visit the page
+#        
 #             for link in links:
 #                 # Open the link
 #                 driver.get(link)
 #
-#                 # Wait until the <body> element is present on the page
+#               
 #                 WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
 #
-#                 # Get the new page source and parse it
 #                 details_page = driver.page_source
 #                 details_soup = BeautifulSoup(details_page, 'html.parser')
 #
-#                 # Check if the product name appears anywhere on the details page (case-insensitive)
 #                 if product.lower() in details_soup.get_text().lower():
 #
 #                     print(f"Product '{product}' found on page: {link}")
 #                     DE.extract(link, product)
-#                     # Add the link to the list of URIs where the product is found
 #                     product_in_uri.append(link)
 #
 #                     try:
-#                         # Try to find the element with ID 'vulnerebleproducts' (ensure this ID is correct)
 #                         vulnerable_product = driver.find_element(By.ID, 'vulnerebleproducts')
-#
-#                         # Check if the product is mentioned in the vulnerable products section
 #                         if product.lower() in vulnerable_product.lower().text():
 #                             print(f"The {vulnerable_product} was found on this {link}")
 #
-#                             # Add the product to the list of affected products
 #                             affected_products.append(product)
 #
 #                     except:
@@ -190,7 +182,6 @@ if __name__ == "__main__":
 #                 else:
 #                     print(f"Product '{product}' not found on page: {link}")
 #
-#                 # Optional: Wait between page navigations
 #                 time.sleep(2)
 #
 #             if not links:
@@ -202,20 +193,16 @@ if __name__ == "__main__":
 #         print(f"An error occurred: {e}")
 #
 #     finally:
-#         # Close the browser when done (cleanup)
 #         print(f" URIs = {product_in_uri}")
 #         print(f"The product in the Affected section is {affected_products}")
 #         driver.quit()
 #
-#     # Uncomment the following line if you want the function to return the list of product URIs
-#     # return product_in_uri
 #
 #
 # if __name__ == "__main__":
-#     # Example usage of the scrape_vulnerabilities function
 #
-#     # The URL of the vulnerabilities listing page
+#     # the URL of the vulnerabilities listing page
 #     oem_url = "https://sec.cloudapps.cisco.com/security/center/publicationListing.x"
 #
-#     # The product name to search for
+#     # the product name to search for
 #     scrape_vulnerabilities(oem_url, "MDS 9000 Series Multilayer Switches ")
